@@ -6,7 +6,6 @@
 #include <inttypes.h>
 #include <assert.h>
 
-
 void clean_fgets(char *pos) { //função para "limpar" string
   strtok(pos, "\n");
 }

@@ -12,7 +12,6 @@ int main (){
   int n,k,i, max_int;
   float epsilon;
 
-
   //leitura das variáveis a partir de um arquivo 
   scanf("%i", &n);
   scanf("%i", &k);
