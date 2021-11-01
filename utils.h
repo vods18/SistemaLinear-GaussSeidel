@@ -7,4 +7,6 @@
 
 void clean_fgets(char *pos);
 
+void generate_matrix(char* equacoes, int n, int k);
+
 #endif // __UTILS_H__

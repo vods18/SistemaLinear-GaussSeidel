@@ -45,6 +45,8 @@ int main (){
   printf("epsilon = %f\n",epsilon);
   printf("max_int = %d\n",max_int);
 
+  generate_matrix(equacoes, n, k);
+
   //func_compare(equacao, x0, epsilon, max_iter); //execução do laço principal para a execução das aproximações de cada iteração necessária
 
 }
