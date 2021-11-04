@@ -99,13 +99,6 @@ void generate_matrix(entrada *e){
     free(f);
   }
 
-  // for (row=0; row<=e->k; row++){
-  //     for(columns=0; columns<e->n; columns++)
-  //     {
-  //         printf("%le     ", matrix_diag[row][columns]);
-  //     }
-  //     printf("\n");
-  // }
 
   //int row, columns;
   int intervalo = (e->k - 1)/2; //2 pra cima 2 pra baixo
@@ -147,19 +140,27 @@ void generate_matrix(entrada *e){
   tempo = timestamp() - tempo;
 
 
-
-  // for (row=0; row<=e->k; row++){
-  //   for(columns=0; columns<e->n; columns++){
-  //     printf("%le     ", e->f[row][columns]);
-  //   }
-  //   printf("\n");
-  // }
-
-  printf("\n");
-  for(i=0; i <=(e->n - 1); i++){
-    printf("%le     ", e->r[i]);
+  printf("SL gerado:\n");  
+  for (row=0; row<=e->k; row++){
+    for(columns=0; columns<e->n; columns++){
+      printf("%f     ", e->f[row][columns]);
+    }
+    printf("\n");
   }
 
-}
+  printf("\nTermos independentes: \n");
+  for(i=0; i <=(e->n - 1); i++){
+    printf("%f     ", e->termos_independentes[i]);
+  }
 
-  
+  printf("\n\n----------------------------------\n\n");
+
+  printf("solucao:   ");
+  for(i=0; i <=(e->n - 1); i++){
+    printf("%f     ", e->r[i]);
+  }
+
+  printf("\n");
+  printf("tempo: %f  ",tempo);
+  printf("\n");
+} 
