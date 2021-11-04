@@ -24,6 +24,8 @@ void generate_matrix(entrada *e);
 
 void SL(entrada *e, double **matrix_diag, double **mat);
 
+void calcula_tempo(entrada *e);
+
 void imprime_saida(entrada *e);
 
 void gaussSeidel(entrada *e);

@@ -71,6 +71,16 @@ void gaussSeidel(entrada *e) {
 
 }
 
+void calcula_tempo(entrada *e){
+
+  e->tempo=0;
+  e->tempo = timestamp();
+  gaussSeidel(e);
+  e->tempo = timestamp() - e->tempo;
+
+
+}
+
 void imprime_saida(entrada *e){
 
   printf("SL gerado:\n");  
@@ -162,11 +172,7 @@ void generate_matrix(entrada *e){
   }
   e->termos_independentes = indep;
 
-  e->tempo=0;
-  e->tempo = timestamp();
-  gaussSeidel(e);
-  e->tempo = timestamp() - e->tempo;
-
+  calcula_tempo(e);
   imprime_saida(e);
   
 } 
