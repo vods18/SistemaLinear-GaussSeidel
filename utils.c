@@ -71,6 +71,34 @@ void gaussSeidel(entrada *e) {
 
 }
 
+void imprime_saida(entrada *e){
+
+  printf("SL gerado:\n");  
+  for (int row=0; row<=e->k; row++){
+    for(int columns=0; columns<e->n; columns++){
+      printf("%f     ", e->f[row][columns]);
+    }
+    printf("\n");
+  }
+
+  printf("\nTermos independentes: \n");
+  for(int i=0; i <=(e->n - 1); i++){
+    printf("%f     ", e->termos_independentes[i]);
+  }
+
+  printf("\n\n----------------------------------\n\n");
+
+  printf("solucao:   ");
+  for(int i=0; i <=(e->n - 1); i++){
+    printf("%f     ", e->r[i]);
+  }
+
+  printf("\n");
+  printf("tempo: %f  ",e->tempo);
+  printf("\n");
+
+}
+
 void generate_matrix(entrada *e){
 
   // usar libmatheval para gerar vetores com os valor de 0 até n para cada equação
@@ -134,33 +162,11 @@ void generate_matrix(entrada *e){
   }
   e->termos_independentes = indep;
 
-  double tempo;
-  tempo = timestamp();
+  e->tempo=0;
+  e->tempo = timestamp();
   gaussSeidel(e);
-  tempo = timestamp() - tempo;
+  e->tempo = timestamp() - e->tempo;
 
-
-  printf("SL gerado:\n");  
-  for (row=0; row<=e->k; row++){
-    for(columns=0; columns<e->n; columns++){
-      printf("%f     ", e->f[row][columns]);
-    }
-    printf("\n");
-  }
-
-  printf("\nTermos independentes: \n");
-  for(i=0; i <=(e->n - 1); i++){
-    printf("%f     ", e->termos_independentes[i]);
-  }
-
-  printf("\n\n----------------------------------\n\n");
-
-  printf("solucao:   ");
-  for(i=0; i <=(e->n - 1); i++){
-    printf("%f     ", e->r[i]);
-  }
-
-  printf("\n");
-  printf("tempo: %f  ",tempo);
-  printf("\n");
+  imprime_saida(e);
+  
 } 

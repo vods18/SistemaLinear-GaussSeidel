@@ -13,6 +13,7 @@ typedef struct entrada {
     double epsilon; //tolerancia no metodo de gauss seidel
     int max_iter; //numero maximo de iterações
     double *r; // resultados
+    double tempo;
 }entrada;
 
 double timestamp();
@@ -22,6 +23,8 @@ void clean_fgets(char *pos);
 void generate_matrix(entrada *e);
 
 void SL(entrada *e, double **matrix_diag, double **mat);
+
+void imprime_saida(entrada *e);
 
 void gaussSeidel(entrada *e);
 
