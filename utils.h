@@ -24,6 +24,10 @@ void generate_matrix(entrada *e);
 
 void SL(entrada *e, double **matrix_diag, double **mat);
 
+//void aloca_matriz(double **mat, double lin, double col);
+
+void calcula_independentes(entrada *e, double **matrix_diag);
+
 void calcula_tempo(entrada *e);
 
 void imprime_saida(entrada *e);

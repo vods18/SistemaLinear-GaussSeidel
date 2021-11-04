@@ -20,6 +20,7 @@ void clean_fgets(char *pos) { //função para "limpar" string
   strtok(pos, "\n");
 }
 
+
 void gaussSeidel(entrada *e) {
   int i,j,p,q,d;
   unsigned int n = e->n;
@@ -68,6 +69,16 @@ void gaussSeidel(entrada *e) {
   e->r = x;
 
   // colocar resultado na estrutura e
+
+}
+
+void calcula_independentes(entrada *e, double **matrix_diag){
+
+  double *indep = (double *) malloc((e->n) * sizeof(double));
+  for(int i = 0; i <= (e->n - 1); i++){
+    indep[i] = matrix_diag[e->n - 1][i];
+  }
+  e->termos_independentes = indep;
 
 }
 
@@ -166,12 +177,7 @@ void generate_matrix(entrada *e){
 
   e->f = mat;
 
-  double *indep = (double *) malloc((e->n) * sizeof(double));
-  for(i = 0; i <= (e->n - 1); i++){
-    indep[i] = matrix_diag[e->n - 1][i];
-  }
-  e->termos_independentes = indep;
-
+  calcula_independentes(e, matrix_diag);
   calcula_tempo(e);
   imprime_saida(e);
   

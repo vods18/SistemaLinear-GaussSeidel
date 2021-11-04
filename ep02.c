@@ -37,6 +37,4 @@ int main (){
 
   generate_matrix(e);
 
-  //func_compare(equacao, x0, epsilon, max_iter); //execução do laço principal para a execução das aproximações de cada iteração necessária
-
 }

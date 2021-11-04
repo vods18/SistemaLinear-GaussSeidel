@@ -1,3 +1,20 @@
+void aloca_matriz(double **mat, double lin, double col){
+
+  mat = malloc ((lin) * sizeof (double*)) ;
+  for (int i=0; i <= (lin); i++){
+    mat[i] = malloc ((col) * sizeof (double));
+  }
+
+  for(int i = 0; i<= (lin); i++){
+    for(int j = 0; j <= (col) ; j++){
+      mat[i][j] = 0;
+    }
+  }
+
+}
+
+
+
 void SL(entrada *e, double **matrix_diag, double **mat){
   // preenche o sistema linear (matriz principal) ------------------------------
 
