@@ -13,7 +13,7 @@ vrs18
 
 
 
-Como executar:
+### Como executar:
 ```bash
 make
 ./ep01 < sample.in > sample.csv
