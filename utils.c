@@ -1,49 +1,73 @@
 #include "utils.h"
 #include <string.h>
 #include <math.h>
+#include <matheval.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <inttypes.h>
 #include <assert.h>
+#include <sys/time.h>
+#include <stdlib.h>
+
+//calcula tempo de execucao em milisegundos
+double timestamp(){
+  struct timeval tp;
+  gettimeofday(&tp, NULL);
+  return((double)(tp.tv_sec*1000.0 + tp.tv_usec/1000.0));
+}
 
 void clean_fgets(char *pos) { //função para "limpar" string
   strtok(pos, "\n");
 }
 
-void generate_matrix(char* equacoes, int n, int k){
+void gauss_seidel(entrada *c){
+  
+}
+
+void generate_matrix(entrada *e){
 
   // usar libmatheval para gerar vetores com os valor de 0 até n para cada equação
-  double* values[k];
   int i, j;
-  for(i=0; i<=k ; i++){
-    double linha[n];
-    for(j=0; j<=n; j++){
-        void *f;
-        double func[];
-        f = evaluator_create(equacoes[j]);
+  double matrix_diag[e->k][e->n], linha[e->n], func;
+
+  for(i=0; i<=e->k ; i++){
+    clean_fgets(e->eq[i]);
+    printf("equation: %s - size:  %lu\n", e->eq[i], strlen(e->eq[i]));
+    void *f = evaluator_create(e->eq[i]);
+    assert(f);
+    for(j=0; j<=e->n; j++){
         func = evaluator_evaluate_x(f, j);
         linha[j] = func;
     }
-    values[i] = linha;
+    *matrix_diag[i] = *linha;
+    free(f);
   }
+
+int row, columns;
+for (row=0; row<=e->k; row++)
+{
+    for(columns=0; columns<=e->n; columns++)
+    {
+         printf("%le     ", matrix_diag[row][columns]);
+    }
+    printf("\n");
+}
   
 
-  int min = n/2 + 1;
-  for(i=0; i<=n-1; i++){
-    for(j=0; j<=min; j++){
+  // int min = e->n/2 + 1;
+  // for(i=0; i<=e->n-1; i++){
+  //   for(j=0; j<=min; j++){
 
-    }
+  //   }
     
-    if(min < k && i <ceil(k/2)){
-      min++;
-    } else if(min == k){
-      min--;
-    } else if(min < k && i >ceil(k/2)){
-      min--;
-    }
-  }
-
-
-
+  //   if(min < e->k && i <ceil(e->k/2)){
+  //     min++;
+  //   } else if(min == e->k){
+  //     min--;
+  //   } else if(min < e->k && i >ceil(e->k/2)){
+  //     min--;
+  //   }
+  // }
+  
 
 }
