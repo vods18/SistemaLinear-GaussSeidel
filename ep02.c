@@ -32,18 +32,8 @@ int main (){
     e->eq[i] = equacao;
   }
 
-  for(int i=0; i<=e->k; i++){
-    printf("equação = %s",e->eq[i]);
-  }
-
-
   scanf("%le", &(e->epsilon));
   scanf("%i", &(e->max_iter));
-
-  printf("n = %d\n",e->n);
-  printf("k = %d\n",e->k);
-  printf("epsilon = %f\n", e->epsilon);
-  printf("max_int = %d\n", e->max_iter);
 
   generate_matrix(e);
 

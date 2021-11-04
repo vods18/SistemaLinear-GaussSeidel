@@ -20,19 +20,56 @@ void clean_fgets(char *pos) { //função para "limpar" string
   strtok(pos, "\n");
 }
 
-void gauss_seidel(entrada *e){
-  
-}
-/*
-void SL(entrada *e, double **matrix_diag){
-  int largura = (e->k - 1)/2; //2 pra cima 2 pra baixo
-  for(int i = 1; i<=largura; i++){
-    for(int j = i, l = 0; j < (e->n -1) ; j++, l++){
-      e->f[l][j] = matrix_diag[largura-i][l];
-      e->f[j][l] = matrix_diag[largura+i][l];
-    }
+void gaussSeidel(entrada *e) {
+  int i,j,p,q,d;
+  unsigned int n = e->n;
+  double *r =  malloc((e->n) * sizeof (double)) ;
+  double temp,sum,erroMaximo,erroCalculado;
+  double **A = e->f;
+  double *b = e->termos_independentes;
+  double *x = malloc((e->n) * sizeof(double));
+  e->r = malloc((e->n) * sizeof(double));
+
+  // A[n][n] = Matriz principal (e->f)
+  // b[n] = vetor_independente (e->termos_independentes)
+
+  // Gauss-Seidel --------------------------------------------------------
+  for(i=0;i<n;i++){
+      r[i] = 0;
   }
-}*/
+  p = 1;
+  q = 1;
+  do{
+      erroCalculado = 0;
+      p++;
+      q++;
+      for(i=0;i<n;i++){
+          sum = 0;
+          for(j=0;j<n;j++){
+              if(i != j){
+                  sum = sum + (A[i][j] * r[j]);
+              }
+          }
+          temp = -1.0 / A[i][i] * sum + b[i] / A[i][i];
+          erroMaximo = fabs(temp - r[i]);
+          r[i] = temp;
+          if(erroMaximo > erroCalculado){
+              erroCalculado = erroMaximo;
+          }
+      }
+  }while(erroCalculado >= e->epsilon && q<=e->max_iter);
+  // -------------------------------------------------------------------------
+
+
+  for(i=0;i<n;i++){ //copiar dados calculados para *x
+    x[i] = r[i];
+  }
+
+  e->r = x;
+
+  // colocar resultado na estrutura e
+
+}
 
 void generate_matrix(entrada *e){
 
@@ -104,20 +141,23 @@ void generate_matrix(entrada *e){
   }
   e->termos_independentes = indep;
 
+  double tempo;
+  tempo = timestamp();
+  gaussSeidel(e);
+  tempo = timestamp() - tempo;
 
 
-  for (row=0; row<=e->k; row++){
-      for(columns=0; columns<e->n; columns++)
-      {
-          printf("%le     ", e->f[row][columns]);
-      }
-      printf("\n");
-  }
+
+  // for (row=0; row<=e->k; row++){
+  //   for(columns=0; columns<e->n; columns++){
+  //     printf("%le     ", e->f[row][columns]);
+  //   }
+  //   printf("\n");
+  // }
 
   printf("\n");
-  for(i=0; i <=(e->n - 1); i++)
-  {
-    printf("%le     ", e->termos_independentes[i]);
+  for(i=0; i <=(e->n - 1); i++){
+    printf("%le     ", e->r[i]);
   }
 
 }
