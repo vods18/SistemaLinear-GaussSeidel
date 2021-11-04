@@ -37,8 +37,13 @@ void SL(entrada *e, double **matrix_diag){
 void generate_matrix(entrada *e){
 
   // usar libmatheval para gerar vetores com os valor de 0 até n para cada equação
-  int i, j, k, l;
-  double matrix_diag[e->k][e->n - 1], linha[e->n], func;
+  int i, j, k, l, row, columns;
+  double **matrix_diag, linha[e->n], func;
+
+  matrix_diag = malloc ((e->k) * sizeof (double*)) ;
+  for (i=0; i <= (e->k); i++){
+    matrix_diag[i] = malloc ((e->n - 1) * sizeof (double));
+  }
 
   for(i=0; i<=e->k ; i++){
     clean_fgets(e->eq[i]);
@@ -57,7 +62,15 @@ void generate_matrix(entrada *e){
     free(f);
   }
 
-  int row, columns;
+  // for (row=0; row<=e->k; row++){
+  //     for(columns=0; columns<e->n; columns++)
+  //     {
+  //         printf("%le     ", matrix_diag[row][columns]);
+  //     }
+  //     printf("\n");
+  // }
+
+  //int row, columns;
   int intervalo = (e->k - 1)/2; //2 pra cima 2 pra baixo
   double **mat;
   // mat = malloc((e->n-1) * (e->n-1) * sizeof(double));
@@ -85,6 +98,12 @@ void generate_matrix(entrada *e){
 
   e->f = mat;
 
+  double *indep = (double *) malloc((e->n) * sizeof(double));
+  for(i = 0; i <= (e->n - 1); i++){
+    indep[i] = matrix_diag[e->n - 1][i];
+  }
+  e->termos_independentes = indep;
+
 
 
   for (row=0; row<=e->k; row++){
@@ -95,8 +114,11 @@ void generate_matrix(entrada *e){
       printf("\n");
   }
 
-
-  //SL(e, matrix_diag);
+  printf("\n");
+  for(i=0; i <=(e->n - 1); i++)
+  {
+    printf("%le     ", e->termos_independentes[i]);
+  }
 
 }
 
