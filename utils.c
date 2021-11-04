@@ -58,28 +58,34 @@ void generate_matrix(entrada *e){
   }
 
   int row, columns;
-  for (row=0; row<=e->k; row++)
-  {
-      for(columns=0; columns<e->n; columns++)
-      {
-          printf("%le     ", matrix_diag[row][columns]);
-      }
-      printf("\n");
+  int intervalo = (e->k - 1)/2; //2 pra cima 2 pra baixo
+  double **mat;
+  // mat = malloc((e->n-1) * (e->n-1) * sizeof(double));
+  mat = malloc ((e->n) * sizeof (double*)) ;
+  for (i=0; i <= (e->n); i++){
+    mat[i] = malloc ((e->n) * sizeof (double));
   }
 
-  int q = (e->k - 1)/2; //2 pra cima 2 pra baixo
-  printf("%d", q);
-  for(i = 1; i<=q; i++){
-    for(j = i, l = 0; j < (e->n -1) ; j++, l++){
-      e->f[l][j] = matrix_diag[q-i][l];
-      e->f[j][l] = matrix_diag[qecvt+i][l];
-      printf("%le     ", e->f[l][j]);
-      printf("%le     ", e->f[j][l]);
+  for(i = 0; i<= (e->n); i++){
+    for(j = 0; j <= (e->n) ; j++){
+      mat[i][j] = 0;
     }
-    printf("\n");
   }
 
-  //SL(e, matrix_diag);
+  for(i = 1; i<=intervalo; i++){
+    for(j = i, l = 0; j <= (e->n - 1) ; j++, l++){
+      mat[l][j] = matrix_diag[intervalo-i][l];
+      mat[j][l] = matrix_diag[intervalo+i][l];
+    }
+  }
+
+  for(i=0; i<= (e->n - 1); i++){
+    mat[i][i] = matrix_diag[intervalo][i];
+  }
+
+  e->f = mat;
+
+
 
   for (row=0; row<=e->k; row++){
       for(columns=0; columns<e->n; columns++)
@@ -88,6 +94,9 @@ void generate_matrix(entrada *e){
       }
       printf("\n");
   }
+
+
+  //SL(e, matrix_diag);
 
 }
 
