@@ -19,4 +19,6 @@ void clean_fgets(char *pos);
 
 void generate_matrix(entrada *e);
 
+void SL(entrada *e, double **matrix_diag);
+
 #endif // __UTILS_H__
