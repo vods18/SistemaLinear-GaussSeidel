@@ -11,7 +11,7 @@ GRR20182564
 
 vrs18
 
-
+Atividade acadêmica da disciplina de Introdução à Computação Científica, implementando um solucionador de sistemas lineares com o método de Gauss-Seidel, utilizando como critério de parada o erro absoluto das iterações.
 
 
 ### Como executar:
