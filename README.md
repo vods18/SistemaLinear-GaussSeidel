@@ -17,6 +17,6 @@ vrs18
 ### Como executar:
 ```bash
 make
-./ep02 < sample.in > sample.csv
+./ep02 < sample.in > sample.out
 cat sample.out
 ```
