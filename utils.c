@@ -16,12 +16,13 @@ double timestamp(){
   return((double)(tp.tv_sec*1000.0 + tp.tv_usec/1000.0));
 }
 
-void clean_fgets(char *pos) { //função para "limpar" string
+//função para "limpar" string
+void clean_fgets(char *pos) { 
   strtok(pos, "\n");
 }
 
-
-void gaussSeidel(entrada *e) {
+// Gauss-Seidel 
+void gaussSeidel(bag *e) {
   int i,j,p,q,d;
   unsigned int n = e->n;
   double *r =  malloc((e->n) * sizeof (double)) ;
@@ -34,10 +35,10 @@ void gaussSeidel(entrada *e) {
   // A[n][n] = Matriz principal (e->f)
   // b[n] = vetor_independente (e->termos_independentes)
 
-  // Gauss-Seidel --------------------------------------------------------
   for(i=0;i<n;i++){
       r[i] = 0;
   }
+  
   p = 1;
   q = 1;
   do{
@@ -59,20 +60,36 @@ void gaussSeidel(entrada *e) {
           }
       }
   }while(erroCalculado >= e->epsilon && q<=e->max_iter);
-  // -------------------------------------------------------------------------
 
 
   for(i=0;i<n;i++){ //copiar dados calculados para *x
     x[i] = r[i];
   }
 
-  e->r = x;
+  e->r = x; //copiar dados para estrutura
+}
 
-  // colocar resultado na estrutura e
+void SL(bag *e, double **mat, double **matrix_diag){
+
+  int intervalo = (e->k - 1)/2; 
+  // preenche as diagonais secundárias
+  for(int i = 1; i<=intervalo; i++){
+    for(int j = i, k = 0; j <= (e->n - 1) ; j++, k++){
+      mat[k][j] = matrix_diag[intervalo-i][k];
+      mat[j][k] = matrix_diag[intervalo+i][k];
+    }
+  }
+
+  // preenche a diagonal principal
+  for(int i=0; i<= (e->n - 1); i++){
+    mat[i][i] = matrix_diag[intervalo][i];
+  }
+
+  e->f = mat;
 
 }
 
-void calcula_independentes(entrada *e, double **matrix_diag){
+void calcula_independentes(bag *e, double **matrix_diag){
 
   double *indep = (double *) malloc((e->n) * sizeof(double));
   for(int i = 0; i <= (e->n - 1); i++){
@@ -82,8 +99,9 @@ void calcula_independentes(entrada *e, double **matrix_diag){
 
 }
 
-void calcula_tempo(entrada *e){
+void calcula_tempo(bag *e){
 
+  //calculamos tempo antes de executar o gaussSeidel e depois pra fazermos a diferença de ambos
   e->tempo=0;
   e->tempo = timestamp();
   gaussSeidel(e);
@@ -92,9 +110,9 @@ void calcula_tempo(entrada *e){
 
 }
 
-void imprime_saida(entrada *e){
+void imprime_saida(bag *e){
 
-  printf("SL gerado:\n");  
+  printf("SL gerado:\n");  //impressao do sistema linear gerado
   for (int row=0; row<=e->k; row++){
     for(int columns=0; columns<e->n; columns++){
       printf("%f     ", e->f[row][columns]);
@@ -102,35 +120,36 @@ void imprime_saida(entrada *e){
     printf("\n");
   }
 
-  printf("\nTermos independentes: \n");
+  printf("\nTermos independentes: \n");  //impressao dos termos independentes
   for(int i=0; i <=(e->n - 1); i++){
     printf("%f     ", e->termos_independentes[i]);
   }
 
   printf("\n\n----------------------------------\n\n");
 
-  printf("solucao:   ");
+  printf("solucao:   "); //impressao do vetor de solucao
   for(int i=0; i <=(e->n - 1); i++){
     printf("%f     ", e->r[i]);
   }
 
   printf("\n");
-  printf("tempo: %f  ",e->tempo);
+  printf("tempo: %f  ",e->tempo); //impressao do tempo de execucao
   printf("\n");
 
 }
 
-void generate_matrix(entrada *e){
+void exerc02(bag *e){
 
   // usar libmatheval para gerar vetores com os valor de 0 até n para cada equação
   int i, j, k, l, row, columns;
   double **matrix_diag, linha[e->n], func;
 
-  matrix_diag = malloc ((e->k) * sizeof (double*)) ;
+  matrix_diag = malloc ((e->k) * sizeof (double*)); //aloca espaco para matrix_diag com valores da diagonal 
   for (i=0; i <= (e->k); i++){
     matrix_diag[i] = malloc ((e->n - 1) * sizeof (double));
   }
 
+  
   for(i=0; i<=e->k ; i++){
     clean_fgets(e->eq[i]);
     void *f = evaluator_create(e->eq[i]);
@@ -147,12 +166,8 @@ void generate_matrix(entrada *e){
     
     free(f);
   }
-
-
-  //int row, columns;
-  int intervalo = (e->k - 1)/2; //2 pra cima 2 pra baixo
-  double **mat;
-  // mat = malloc((e->n-1) * (e->n-1) * sizeof(double));
+  
+  double **mat; //aloca espaco da matriz mat com possiveis resultados
   mat = malloc ((e->n) * sizeof (double*)) ;
   for (i=0; i <= (e->n); i++){
     mat[i] = malloc ((e->n) * sizeof (double));
@@ -164,21 +179,9 @@ void generate_matrix(entrada *e){
     }
   }
 
-  for(i = 1; i<=intervalo; i++){
-    for(j = i, l = 0; j <= (e->n - 1) ; j++, l++){
-      mat[l][j] = matrix_diag[intervalo-i][l];
-      mat[j][l] = matrix_diag[intervalo+i][l];
-    }
-  }
-
-  for(i=0; i<= (e->n - 1); i++){
-    mat[i][i] = matrix_diag[intervalo][i];
-  }
-
-  e->f = mat;
-
-  calcula_independentes(e, matrix_diag);
-  calcula_tempo(e);
-  imprime_saida(e);
+  SL(e, mat, matrix_diag); //Gera sistema linear
+  calcula_independentes(e, matrix_diag); //Calcula termos independentes
+  calcula_tempo(e); //calcula tempo de execucao
+  imprime_saida(e); //imprime saida final
   
 } 
